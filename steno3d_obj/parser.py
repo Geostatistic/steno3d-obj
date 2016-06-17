@@ -1,7 +1,7 @@
 import steno3d, properties
 import re
 
-class obj(steno3d.parsers.BaseParser):
+class obj(steno3d.parsers._BaseParser):
 
     extensions = ('obj',)
 
@@ -40,10 +40,25 @@ class obj(steno3d.parsers.BaseParser):
                     ii = 0
                     faces += [face[ii:ii+3]]
 
-        S = steno3d.resources.Surface(mesh={"vertices": vertices, "triangles": faces})
+        P = steno3d.Project(
+            description='Imported from .' + self.extensions[0] + ' file'
+        )
 
-        return (S,)
+        S = steno3d.Surface(
+            project=P,
+            mesh={
+                "vertices": vertices,
+                "triangles": faces
+            }
+        )
+
+        return (P,)
 
     def export(self, S):
         raise NotImplementedError()
 
+
+class AllParsers_obj(steno3d.parsers.AllParsers):
+    extensions = {
+        'obj': obj
+    }
