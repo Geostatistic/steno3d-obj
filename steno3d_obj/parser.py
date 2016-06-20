@@ -8,8 +8,9 @@ class obj(steno3d.parsers._BaseParser):
     fileName = properties.String("The main file to parse.")
 
     def __init__(self, fileName, **kwargs):
+        super(obj, self).__init__(**kwargs)
         self.fileName = fileName
-        self.set(**kwargs)
+        # self.set(**kwargs)
 
     def parse(self, **kwargs):
         self.set(**kwargs)
