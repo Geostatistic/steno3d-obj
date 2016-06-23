@@ -10,7 +10,6 @@ class obj(steno3d.parsers._BaseParser):
     def __init__(self, fileName, **kwargs):
         super(obj, self).__init__(**kwargs)
         self.fileName = fileName
-        # self.set(**kwargs)
 
     def parse(self, **kwargs):
         self.set(**kwargs)
