@@ -1,15 +1,15 @@
 import steno3d, properties
 import re
 
-class obj(steno3d.parsers.BaseParser):
+class obj(steno3d.parsers._BaseParser):
 
     extensions = ('obj',)
 
     fileName = properties.String("The main file to parse.")
 
     def __init__(self, fileName, **kwargs):
+        super(obj, self).__init__(**kwargs)
         self.fileName = fileName
-        self.set(**kwargs)
 
     def parse(self, **kwargs):
         self.set(**kwargs)
@@ -40,10 +40,25 @@ class obj(steno3d.parsers.BaseParser):
                     ii = 0
                     faces += [face[ii:ii+3]]
 
-        S = steno3d.resources.Surface(mesh={"vertices": vertices, "triangles": faces})
+        P = steno3d.Project(
+            description='Imported from .' + self.extensions[0] + ' file'
+        )
 
-        return (S,)
+        S = steno3d.Surface(
+            project=P,
+            mesh={
+                "vertices": vertices,
+                "triangles": faces
+            }
+        )
+
+        return (P,)
 
     def export(self, S):
         raise NotImplementedError()
 
+
+class AllParsers_obj(steno3d.parsers.AllParsers):
+    extensions = {
+        'obj': obj
+    }
