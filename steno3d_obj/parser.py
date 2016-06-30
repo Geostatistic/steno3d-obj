@@ -20,21 +20,6 @@ class obj(BaseParser):
 
     extensions = ('obj',)
 
-    def _initialize(self):
-        """function _initialize
-
-        Raise an exception if the file_name doesn't exist and warn the
-        user if the extension is incorrect
-        """
-        if not isfile(self.file_name):
-            raise ValueError('{}: File not found.'.format(self.file_name))
-        if self.file_name.split('.')[-1] not in self.extensions:
-            warn('{name}: Unsupported extension - parse() may fail. '
-                 'Supported extensions are {exts}'.format(
-                    name=self.file_name,
-                    exts='(' + ', '.join(self.extensions) + ')'
-                 ))
-
     def parse(self, project=None, **kwargs):
         """function parse
 

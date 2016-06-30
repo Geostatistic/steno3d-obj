@@ -23,7 +23,8 @@ class TestBasic(unittest.TestCase):
         p.parse(P)
         assert len(P.resources) == 2
 
-        self.assertRaises(ValueError, lambda: steno3d.parsers.obj('junk.obj'))
+        self.assertRaises(IOError, lambda: steno3d.parsers.obj('junk.obj'))
+        self.assertRaises(IOError, lambda: steno3d.parsers.obj(5))
 
     def test_allparsers(self):
 
