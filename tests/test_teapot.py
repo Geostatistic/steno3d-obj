@@ -1,5 +1,11 @@
-import unittest, numpy as np, os
-import steno3d, steno3d_obj
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+from __future__ import unicode_literals
+
+import unittest
+import steno3d
+import steno3d_obj
 
 class TestBasic(unittest.TestCase):
 
@@ -13,6 +19,12 @@ class TestBasic(unittest.TestCase):
         assert isinstance(P.resources[0], steno3d.Surface)
         assert P.resources[0].mesh.nN == 3644
         assert P.resources[0].mesh.nC == 6320
+
+        p.parse(P)
+        assert len(P.resources) == 2
+
+        self.assertRaises(IOError, lambda: steno3d.parsers.obj('junk.obj'))
+        self.assertRaises(IOError, lambda: steno3d.parsers.obj(5))
 
     def test_allparsers(self):
 

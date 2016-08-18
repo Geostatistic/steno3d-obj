@@ -1,64 +1,84 @@
-import steno3d, properties
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+from __future__ import unicode_literals
+
 import re
 
-class obj(steno3d.parsers._BaseParser):
+from steno3d.parsers import AllParsers
+from steno3d.parsers import BaseParser
+from steno3d import Project, Surface
+
+
+class obj(BaseParser):
+    """class obj
+
+    Parser class for wavefront .obj object files
+    """
 
     extensions = ('obj',)
 
-    fileName = properties.String("The main file to parse.")
+    def parse(self, project=None, **kwargs):
+        """function parse
 
-    def __init__(self, fileName, **kwargs):
-        super(obj, self).__init__(**kwargs)
-        self.fileName = fileName
+        Optional input:
+            project - Preexisting project to add .obj surface to. If not
+                      provided, a new project will be created
 
-    def parse(self, **kwargs):
-        self.set(**kwargs)
+        Output:
+            tuple containing one project with one surface parsed from
+            the .obj file
+        """
+        if project is None:
+            proj = Project(
+                description='Project imported from ' + self.file_name
+            )
+        elif isinstance(project, Project):
+            proj = project
+        else:
+            raise ValueError('Only allowed input for parse is '
+                             'optional Steno3D project')
+
 
         digit = "-?\d*\.\d+|-?\d+"
-        integer = "\d+"
-        comment = re.compile("\s*#");
-        vertex = re.compile("\s*v\s+("+digit+")\s+("+digit+")\s+("+digit+")")
-
+        comment = re.compile("\s*#")
+        vertex = re.compile(
+            "\s*v\s+(" + digit + ")\s+(" + digit + ")\s+(" + digit + ")"
+        )
         vertices = []
-        vertTextures = []
         faces = []
 
-        with open(self.fileName, 'r') as f:
-
+        with open(self.file_name, 'r') as f:
             for line in f:
                 line = line.strip()
-                if (comment.match(line) is not None or len(line) == 0):
+                if comment.match(line) is not None or len(line) == 0:
                     continue
                 value = vertex.match(line)
                 if value is not None:
-                    vertices.append([float(value.group(1)), float(value.group(2)), float(value.group(3))])
+                    vertices.append([float(value.group(1)),
+                                     float(value.group(2)),
+                                     float(value.group(3))])
                     continue
-
                 if line.startswith('f '):
-                    face = [int(_.split('/')[0])-1 for _ in line.strip('f ').split(' ') if len(_) > 0]
-                    # for ii in range(len(face)-2):
-                    ii = 0
-                    faces += [face[ii:ii+3]]
+                    face = [int(_.split('/')[0])-1 for
+                            _ in line.strip('f ').split(' ') if len(_) > 0]
+                    for i in range(len(face)-2):
+                        faces += [[face[0], face[i+1], face[i+2]]]
 
-        P = steno3d.Project(
-            description='Imported from .' + self.extensions[0] + ' file'
-        )
-
-        S = steno3d.Surface(
-            project=P,
+        Surface(
+            project=proj,
             mesh={
                 "vertices": vertices,
                 "triangles": faces
             }
         )
+        return (proj,)
 
-        return (P,)
-
-    def export(self, S):
+    def export(self, proj):
         raise NotImplementedError()
 
 
-class AllParsers_obj(steno3d.parsers.AllParsers):
+class AllParsers_obj(AllParsers):
     extensions = {
         'obj': obj
     }
