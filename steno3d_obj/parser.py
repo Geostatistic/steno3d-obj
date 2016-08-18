@@ -3,9 +3,7 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
-from os.path import isfile
 import re
-from warnings import warn
 
 from steno3d.parsers import AllParsers
 from steno3d.parsers import BaseParser
@@ -40,7 +38,7 @@ class obj(BaseParser):
         else:
             raise ValueError('Only allowed input for parse is '
                              'optional Steno3D project')
-        self.set(**kwargs)
+
 
         digit = "-?\d*\.\d+|-?\d+"
         comment = re.compile("\s*#")
@@ -64,7 +62,8 @@ class obj(BaseParser):
                 if line.startswith('f '):
                     face = [int(_.split('/')[0])-1 for
                             _ in line.strip('f ').split(' ') if len(_) > 0]
-                    faces += [face[0:3]]
+                    for i in range(len(face)-2):
+                        faces += [[face[0], face[i+1], face[i+2]]]
 
         Surface(
             project=proj,
