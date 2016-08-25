@@ -1,7 +1,7 @@
 Steno3D Parser: .obj
 ********************
 
-.. image:: https://travis-ci.org/3ptscience/steno3dpy.svg?branch=master
+.. image:: https://travis-ci.org/3ptscience/steno3d-obj.svg?branch=master
     :target: https://travis-ci.org/3ptscience/steno3d-obj
 
 .. image:: https://img.shields.io/badge/license-MIT-blue.svg
@@ -13,7 +13,7 @@ Steno3D Parser: .obj
 
 Welcome to the .obj file parser plugin for `Steno3D <https://www.steno3d.com>`_
 by `3point Science <https://www.3ptscience.com>`_. This repository supplements the
-`Steno3D Python client library <https://github.com/3ptscience/steno3dpy`_.
+`Steno3D Python client library <https://github.com/3ptscience/steno3dpy>`_.
 
 To install this parser, simply
 
@@ -34,7 +34,7 @@ used as follows:
 Currently, this parser only supports basic faces, lines, and points.
 Textures, normals, free-form curves/surfaces, groupings, and display attributes
 are all ignored. Detailed .obj file documentation can be found
-`here <www.cs.utah.edu/~boulos/cs3505/obj_spec.pdf>`_.
+`here <http://www.cs.utah.edu/~boulos/cs3505/obj_spec.pdf>`_.
 
 If you are interested in increased support you may
 `submit an issue <https://github.com/3ptscience/steno3d-obj/issues>`_
