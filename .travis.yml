@@ -23,10 +23,10 @@ script:
   - nosetests
 
 after_success:
-  # - openssl aes-256-cbc -K $encrypted_939ecaffddf0_key -iv $encrypted_939ecaffddf0_iv -in .pypirc.enc -out ~/.pypirc -d
-  # - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" -a $TRAVIS_PYTHON_VERSION == "2.7" -a -n "$(grep version setup.py | cut -d \' -f 2 | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$')" ]; then
-  #     make publish;
-  #   fi
+  - openssl aes-256-cbc -K $encrypted_d7b63ea5f0f2_key -iv $encrypted_d7b63ea5f0f2_iv -in .pypirc.enc -out .pypirc -d
+  - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" -a $TRAVIS_PYTHON_VERSION == "2.7" ]; then
+      make publish;
+    fi
 
 notifications:
  slack: 3point:n4uGopqXrpbYFbslpV5z0tyO

@@ -27,7 +27,7 @@ setup(
     version = '0.1.0',
     packages = find_packages(),
     install_requires = ['numpy>=1.7',
-                        'steno3d'],
+                        'steno3d>=0.2.6'],
     author = '3point Science',
     author_email = 'info@3ptscience.com',
     description = 'steno3d_obj',
@@ -37,5 +37,6 @@ setup(
     download_url = 'http://github.com/3ptscience/steno3d-obj',
     classifiers=CLASSIFIERS,
     platforms = ['Windows', 'Linux', 'Solaris', 'Mac OS-X', 'Unix'],
+    license = 'MIT License',
     use_2to3 = False,
 )
