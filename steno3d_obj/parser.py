@@ -5,16 +5,13 @@ from __future__ import unicode_literals
 
 import numpy as np
 
-from steno3d.parsers import AllParsers
-from steno3d.parsers import BaseParser
-from steno3d.parsers import ParseError
 import steno3d
 
 
-class obj(BaseParser):
+class obj(steno3d.parsers.BaseParser):                          # nopep8
     """class obj
 
-    Parser class for wavefront .obj object files
+    Parser class for Wavefront .obj ASCII object files.
     """
 
     extensions = ('obj',)
@@ -35,13 +32,18 @@ class obj(BaseParser):
     def parse(self, project=None, verbose=True):
         """function parse
 
+        Parses the .obj file provided at parser instantiation into a
+        Steno3D project.
+
         Optional input:
-            project - Preexisting project to add .obj surface to. If not
-                      provided, a new project will be created
+            project: Preexisting Steno3D project to add .obj file components
+                     to. If not provided, a new project will be created.
+            verbose: Print messages and warnings during file parsing.
+                     (default: True)
 
         Output:
-            tuple containing one project with one surface parsed from
-            the .obj file
+            tuple containing one Steno3D project with components parsed
+            from the .obj file
         """
         if project is None:
             proj = steno3d.Project(
@@ -50,8 +52,8 @@ class obj(BaseParser):
         elif isinstance(project, steno3d.Project):
             proj = project
         else:
-            raise ParseError('Only allowed input for parse is '
-                             'optional Steno3D project')
+            raise steno3d.parsers.ParseError('Only allowed input for parse is '
+                                             'optional Steno3D project')
 
         warnings = set()
         vertices = []
@@ -77,7 +79,7 @@ class obj(BaseParser):
                     else:
                         ext_line = []
 
-                    # Check for vertex
+                    # Vertex
                     if line[0] == 'v':
                         if len(line) == 5:
                             self._warn('Unsupported feature: Vertex Weight',
@@ -122,7 +124,7 @@ class obj(BaseParser):
                         )
 
                 except:
-                    raise ParseError(
+                    raise steno3d.parsers.ParseError(
                         'Bad file line encountered while '
                         'parsing {}:\n{}'.format(
                             self.file_name,
@@ -131,11 +133,11 @@ class obj(BaseParser):
                     )
 
         if len(points) == 0 and len(segments) == 0 and len(triangles) == 0:
-            raise ParseError(
+            raise steno3d.parsers.ParseError(
                 'No valid geometry extracted while parsing {}.\nPlease '
                 'ensure this file has vertices (v) and points (p), lines (l), '
-                'or faces (f).\nOther features are currently unsupported.\nIf '
-                'you would like to contribute, visit '
+                'or faces (f).\nOther features are currently unsupported. If '
+                'you would like to contribute, visit\n'
                 'https://github.com/3ptscience/steno3d-obj'.format(
                     self.file_name
                 )
@@ -143,8 +145,10 @@ class obj(BaseParser):
 
         if len(segments) > 0:
             if np.min(segments) < 0 or np.max(segments) >= len(vertices):
-                raise ParseError(
-                    'Invalid line geometry encountered in parsed file.'
+                raise steno3d.parsers.ParseError(
+                    'Invalid line geometry encountered in parsed file. '
+                    'Segment indices must be between 0 and '
+                    '{}'.format(len(vertices)-1)
                 )
             steno3d.Line(
                 project=proj,
@@ -156,8 +160,10 @@ class obj(BaseParser):
 
         if len(triangles) > 0:
             if np.min(triangles) < 0 or np.max(triangles) >= len(vertices):
-                raise ParseError(
-                    'Invalid surface geometry encountered in parsed file.'
+                raise steno3d.parsers.ParseError(
+                    'Invalid surface geometry encountered in parsed file. '
+                    'Triangle indices must be between 0 and '
+                    '{}'.format(len(vertices)-1)
                 )
             steno3d.Surface(
                 project=proj,
@@ -189,11 +195,15 @@ class obj(BaseParser):
         if verbose:
             print('  ' + warning)
 
-    def export(self, proj):
-        raise NotImplementedError()
 
+class Wavefront(steno3d.parsers.AllParsers):
+    """class Wavefront
 
-class AllParsers_obj(AllParsers):
+    The Wavefront parser can be used for any Wavefront file. Currently,
+    only .obj files are supported so this class is a bit redundant, and
+    more for demonstration purposes of how to define a class that
+    inherits AllParsers.
+    """
     extensions = {
         'obj': obj
     }

@@ -44,9 +44,9 @@ class TestObj(unittest.TestCase):
         assert proj.resources[0].mesh.nN == 3644
         assert proj.resources[0].mesh.nC == 6320
 
-    def test_allparsers_obj(self):
+    def test_wavefront(self):
         teapot = path.sep.join(self.assets + ['teapot.obj'])
-        parser = steno3d.parsers.AllParsers_obj(teapot)
+        parser = steno3d.parsers.Wavefront(teapot)
         projs = parser.parse()
         assert len(projs) == 1
         proj, = projs
