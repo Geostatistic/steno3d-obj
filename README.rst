@@ -9,7 +9,7 @@ Steno3D Parser: .obj
     :target: https://github.com/3ptscience/steno3d-obj/blob/master/LICENSE
 
 .. image:: https://img.shields.io/badge/download-PyPI-yellow.svg
-    :target: https://pypi.python.org/pypi/steno3d-obj
+    :target: https://pypi.python.org/pypi/steno3d_obj
 
 Welcome to the .obj file parser plugin for `Steno3D <https://www.steno3d.com>`_
 by `3point Science <https://www.3ptscience.com>`_. This repository supplements the
