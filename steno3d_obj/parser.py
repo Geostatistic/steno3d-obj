@@ -46,12 +46,10 @@ class obj(steno3d.parsers.BaseParser):                          # nopep8
             from the .obj file
         """
         if project is None:
-            proj = steno3d.Project(
+            project = steno3d.Project(
                 description='Project imported from ' + self.file_name
             )
-        elif isinstance(project, steno3d.Project):
-            proj = project
-        else:
+        elif not isinstance(project, steno3d.Project):
             raise steno3d.parsers.ParseError('Only allowed input for parse is '
                                              'optional Steno3D project')
 
@@ -67,7 +65,7 @@ class obj(steno3d.parsers.BaseParser):                          # nopep8
             ext_line = []
             for line in f:
                 try:
-                    line = ext_line + line.strip().split()
+                    line = ext_line + line.split()
                     # Check for comment
                     if len(line) == 0 or line[0] == '#':
                         continue
@@ -138,7 +136,7 @@ class obj(steno3d.parsers.BaseParser):                          # nopep8
                 'ensure this file has vertices (v) and points (p), lines (l), '
                 'or faces (f).\nOther features are currently unsupported. If '
                 'you would like to contribute, visit\n'
-                'https://github.com/3ptscience/steno3d-obj'.format(
+                'https://github.com/seequent/steno3d-obj'.format(
                     self.file_name
                 )
             )
@@ -151,7 +149,7 @@ class obj(steno3d.parsers.BaseParser):                          # nopep8
                     '{}'.format(len(vertices)-1)
                 )
             steno3d.Line(
-                project=proj,
+                project=project,
                 mesh=steno3d.Mesh1D(
                     segments=segments,
                     vertices=vertices
@@ -166,7 +164,7 @@ class obj(steno3d.parsers.BaseParser):                          # nopep8
                     '{}'.format(len(vertices)-1)
                 )
             steno3d.Surface(
-                project=proj,
+                project=project,
                 mesh=steno3d.Mesh2D(
                     triangles=triangles,
                     vertices=vertices
@@ -175,7 +173,7 @@ class obj(steno3d.parsers.BaseParser):                          # nopep8
 
         if len(points) > 0:
             steno3d.Point(
-                project=proj,
+                project=project,
                 mesh=steno3d.Mesh0D(
                     vertices=points
                 )
@@ -184,11 +182,12 @@ class obj(steno3d.parsers.BaseParser):                          # nopep8
         if verbose and len(warnings) > 0:
             print('  If you are interested in contributing to unsupported '
                   'features, please visit\n'
-                  '      https://github.com/3ptscience/steno3d-obj')
+                  '      https://github.com/seequent/steno3d-obj')
 
-        return (proj,)
+        return (project,)
 
-    def _warn(self, warning, warnings, verbose):
+    @staticmethod
+    def _warn(warning, warnings, verbose):
         if warning in warnings:
             return
         warnings.add(warning)
