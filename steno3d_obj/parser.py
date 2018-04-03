@@ -136,7 +136,7 @@ class obj(steno3d.parsers.BaseParser):                          # nopep8
                 'ensure this file has vertices (v) and points (p), lines (l), '
                 'or faces (f).\nOther features are currently unsupported. If '
                 'you would like to contribute, visit\n'
-                'https://github.com/3ptscience/steno3d-obj'.format(
+                'https://github.com/seequent/steno3d-obj'.format(
                     self.file_name
                 )
             )
@@ -182,7 +182,7 @@ class obj(steno3d.parsers.BaseParser):                          # nopep8
         if verbose and len(warnings) > 0:
             print('  If you are interested in contributing to unsupported '
                   'features, please visit\n'
-                  '      https://github.com/3ptscience/steno3d-obj')
+                  '      https://github.com/seequent/steno3d-obj')
 
         return (project,)
 
